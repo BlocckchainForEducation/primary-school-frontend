@@ -2,7 +2,7 @@ import React from "react";
 import DownloadExampleData from "../../../shared/DownloadExampleData";
 
 export default function TeacherDataExample() {
-  const title = "Mẫu file dữ liệu Giảng viên";
+  const title = "Mẫu file dữ liệu Giáo viên";
   const fileName = "v1.2/giang-vien-example.xlsx";
   const head = ["Mã giáo viên*", "Họ và tên*", "Email*", "Số điện thoại", "Khóa công khai"];
   const body = [

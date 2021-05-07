@@ -7,6 +7,7 @@ import { useSnackbar } from "notistack";
 import { requirePrivateKeyHex } from "../../../utils/keyholder";
 import { ERR_TOP_CENTER, SUCCESS_BOTTOM_CENTER } from "../../../utils/snackbar-utils";
 import axios from "axios";
+import TeacherTable from "./TeacherTable";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -23,7 +24,7 @@ const useStyles = makeStyles((theme) => ({
 export default function CreateTeacherAccount() {
   const cls = useStyles();
   const [uploading, setUploading] = useState(false);
-  const [teachers, setTeachers] = useState(null);
+  const [teachers, setTeachers] = useState([]);
   const [isFetching, setIsFetching] = useState(true);
   const { enqueueSnackbar } = useSnackbar();
 
@@ -31,7 +32,17 @@ export default function CreateTeacherAccount() {
     fetchTeachers();
   });
 
-  async function fetchTeachers() {}
+  async function fetchTeachers() {
+    try {
+      const response = await axios.get("/staff/teachers");
+      setIsFetching(false);
+      const teachersData = response.data.map((teacher, index) => ({ ...teacher, id: index + 1 }));
+      setTeachers(teachersData);
+    } catch (error) {
+      setIsFetching(false);
+      error.response && enqueueSnackbar(JSON.stringify(error.response.data), ERR_TOP_CENTER);
+    }
+  }
 
   async function hdUploadFile(files) {
     const privateKeyHex = await requirePrivateKeyHex(enqueueSnackbar);
@@ -42,9 +53,9 @@ export default function CreateTeacherAccount() {
     try {
       const response = await axios.post("/staff/create-teacher", formData);
       setUploading(false);
+      enqueueSnackbar("Tạo tài khoản các giáo viên thành công!", SUCCESS_BOTTOM_CENTER);
       const updatedTeachers = [...teachers, ...response.data];
       setTeachers(updatedTeachers);
-      enqueueSnackbar("Tạo tài khoản các giáo viên thành công!", SUCCESS_BOTTOM_CENTER);
     } catch (error) {
       setUploading(false);
       console.error(error);
@@ -57,7 +68,7 @@ export default function CreateTeacherAccount() {
       <div className={cls.root}>
         <TeacherDataExample></TeacherDataExample>
         <DragnDropZone onDropAccepted={hdUploadFile} uploading={uploading}></DragnDropZone>
-        {/* <TeacherUploadHistory></TeacherUploadHistory> */}
+        <TeacherTable {...{ isFetching, teachers }}></TeacherTable>
       </div>
     </Page>
   );
