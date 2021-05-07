@@ -1,19 +1,17 @@
 import React from "react";
 import { Navigate } from "react-router-dom";
+import MainLayout from "src/layouts/MainLayout";
 import StaffDashboardLayout from "src/layouts/StaffDashboardLayout";
 import TeacherDashboardLayout from "src/layouts/TeacherDashboardLayout";
-import MainLayout from "src/layouts/MainLayout";
 import NotFoundView from "src/shared/NotFoundView";
-
 import SignInView from "src/views/guest/SignIn";
-
+import { getRole, ROLE } from "./utils/mng-role";
+import Certificate from "./views/staff/Certificate";
+import ClassList from "./views/staff/ClassList";
+import CreateClass from "./views/staff/CreateClass";
+import CreateTeacherAccount from "./views/staff/CreateTeacherAccount";
 import MakeRequest from "./views/staff/Register";
 import TeacherProfile from "./views/teacher/Profile";
-import { getRole, ROLE } from "./utils/mng-role";
-import Teachers from "./views/staff/Teachers";
-import CreateClass from "./views/staff/CreateClass";
-import ClassList from "./views/staff/ClassList";
-import Certificate from "./views/staff/Certificate";
 
 const routes = [
   {
@@ -21,7 +19,7 @@ const routes = [
     element: <StaffDashboardLayout />,
     children: [
       { path: "dang-ki-tham-gia", element: <MakeRequest /> },
-      { path: "ds-giao-vien", element: <Teachers /> },
+      { path: "tao-giao-vien", element: <CreateTeacherAccount /> },
       { path: "tao-lop-hoc", element: <CreateClass /> },
       { path: "ds-lop-hoc", element: <ClassList /> },
       { path: "cong-nhan-hoan-thanh", element: <Certificate /> },

@@ -1,14 +1,12 @@
-import { makeStyles } from "@material-ui/core";
-import axios from "axios";
-import { useSnackbar } from "notistack";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Page from "src/shared/Page";
+import TeacherDataExample from "./TeacherDataExample";
 import DragnDropZone from "../../../shared/DragnDropZone";
+import { makeStyles } from "@material-ui/core";
+import { useSnackbar } from "notistack";
 import { requirePrivateKeyHex } from "../../../utils/keyholder";
 import { ERR_TOP_CENTER, SUCCESS_BOTTOM_CENTER } from "../../../utils/snackbar-utils";
-import { startUploadFile, uploadFileFail, uploadFileSuccess } from "./redux";
-import TeacherDataExample from "./TeacherDataExample";
-import TeacherUploadHistory from "./TeacherUploadHistory";
+import axios from "axios";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -24,9 +22,16 @@ const useStyles = makeStyles((theme) => ({
 
 export default function CreateTeacherAccount() {
   const cls = useStyles();
-  const [isFetching, setIsFetching] = useState(true);
   const [uploading, setUploading] = useState(false);
+  const [teachers, setTeachers] = useState(null);
+  const [isFetching, setIsFetching] = useState(true);
   const { enqueueSnackbar } = useSnackbar();
+
+  useEffect(() => {
+    fetchTeachers();
+  });
+
+  async function fetchTeachers() {}
 
   async function hdUploadFile(files) {
     const privateKeyHex = await requirePrivateKeyHex(enqueueSnackbar);
@@ -36,11 +41,12 @@ export default function CreateTeacherAccount() {
     formData.append("privateKeyHex", privateKeyHex);
     try {
       const response = await axios.post("/staff/create-teacher", formData);
-      dp(uploadFileSuccess(response.data));
-
+      setUploading(false);
+      const updatedTeachers = [...teachers, ...response.data];
+      setTeachers(updatedTeachers);
       enqueueSnackbar("Tạo tài khoản các giáo viên thành công!", SUCCESS_BOTTOM_CENTER);
     } catch (error) {
-      dp(uploadFileFail());
+      setUploading(false);
       console.error(error);
       if (error.response) enqueueSnackbar(JSON.stringify(error.response.data), ERR_TOP_CENTER);
     }

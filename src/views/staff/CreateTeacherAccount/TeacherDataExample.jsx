@@ -7,9 +7,9 @@ export default function TeacherDataExample() {
   const head = ["Mã giáo viên*", "Họ và tên*", "Email*", "Số điện thoại", "Khóa công khai"];
   const body = [
     ["GV00001", "Vũ Văn Thiệu", "thieu.vuvan@hust.edu.vn", 982928307, "0286bdc0501ea9625d83b535021faf29a3b3bf563d4fed85ffd63ede0b498304ed"],
-    ["KCNTT", "Innovation Centre", "GV00002", "Nguyễn Phi Lê", "le.nguyenphi@hust.edu.vn", 1662257624],
+    ["GV00002", "Nguyễn Phi Lê", "le.nguyenphi@hust.edu.vn", 1662257624],
     ["GV00003", "Umi Hirose", "umi.hirose@soict.hust.edu.vn", "", "026a80ba4d7b2f12a3cda2fbe1223b37119bda786dec64cc3458e593052dab16bb"],
-    ["KCNTT", "TTMT", "GV00004", "Nguyễn Ngọc Bích A", "bichann@soict.hust.edu.vn"],
+    ["GV00004", "Nguyễn Ngọc Bích A", "bichann@soict.hust.edu.vn"],
     [
       "GV00005",
       "Ngô Lam Trung",

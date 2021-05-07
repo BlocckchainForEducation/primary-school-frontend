@@ -14,9 +14,9 @@ const items = [
     title: "Đăng kí tham gia",
   },
   {
-    href: "/cb-truong/ds-giao-vien",
+    href: "/cb-truong/tao-giao-vien",
     icon: HowToVoteIcon,
-    title: "Danh sách Giáo viên",
+    title: "Tạo TK Giáo viên",
   },
   {
     href: "/cb-truong/tao-lop-hoc",
