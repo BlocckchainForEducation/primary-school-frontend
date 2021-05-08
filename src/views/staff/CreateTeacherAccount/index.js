@@ -30,7 +30,7 @@ export default function CreateTeacherAccount() {
 
   useEffect(() => {
     fetchTeachers();
-  });
+  }, []);
 
   async function fetchTeachers() {
     try {
