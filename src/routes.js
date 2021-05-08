@@ -12,6 +12,7 @@ import CreateClass from "./views/staff/CreateClass";
 import CreateTeacherAccount from "./views/staff/CreateTeacherAccount";
 import MakeRequest from "./views/staff/Register";
 import TeacherProfile from "./views/teacher/Profile";
+import ClassListOfTeacher from "./views/teacher/ClassList";
 
 const routes = [
   {
@@ -27,10 +28,12 @@ const routes = [
     ],
   },
   {
-    path: "/giang-vien",
+    path: "/giao-vien",
     element: <TeacherDashboardLayout />,
     children: [
       { path: "thong-tin-ca-nhan", element: <TeacherProfile /> },
+      { path: "ds-lop-hoc", element: <ClassListOfTeacher /> },
+      { path: "ghi-diem-tong-ket", element: <TeacherProfile /> },
       { path: "*", element: <Navigate to="/404" replace={true} /> },
     ],
   },
@@ -55,7 +58,7 @@ function Redirector(props) {
   } else if (role === ROLE.STAFF) {
     to = "/cb-truong/dang-ki-tham-gia";
   } else if (role === ROLE.TEACHER) {
-    to = "/giang-vien/thong-tin-ca-nhan";
+    to = "/giao-vien/thong-tin-ca-nhan";
   }
   return <Navigate to={to} />;
 }

@@ -3,7 +3,7 @@ import { DataGrid } from "@material-ui/data-grid";
 
 const columns = [
   { field: "id", headerName: "#", width: 75, type: "string" },
-  { field: "teacherId", headerName: "Mã giáo viên", width: 125, type: "string" },
+  { field: "teacherId", headerName: "Mã giáo viên", width: 135, type: "string" },
   { field: "name", headerName: "Họ và Tên", width: 250, type: "string" },
   { field: "email", headerName: "Email/Account", width: 250, type: "string" },
   { field: "firstTimePassword", headerName: "1st Mật khẩu", width: 150, type: "string" },

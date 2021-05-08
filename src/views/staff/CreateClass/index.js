@@ -116,14 +116,14 @@ export default function CreateClass(props) {
           Danh sách học sinh
         </Typography>
 
-        <AppBar position="static">
+        <AppBar position="static" style={{ padding: "4px 0" }}>
           <Tabs centered value={currentTab} onChange={(e, newValue) => setCurrentTab(newValue)} aria-label="simple tabs example">
             <Tab label="Nhập trực tiếp" />
             <Tab label="Upload file Excel" />
           </Tabs>
         </AppBar>
         <Box hidden={currentTab !== 0}>
-          <TableContainer component={Paper}>
+          <TableContainer component={Paper} style={{ borderRadius: 0 }}>
             <Table size="medium">
               <TableHead>
                 <TableRow>
@@ -214,15 +214,13 @@ export default function CreateClass(props) {
                   setStudents([...students, {}]);
                 }}
               >
-                Thêm hàng
+                Thêm
               </Button>
             </Box>
           </TableContainer>
         </Box>
         <Box hidden={currentTab !== 1}>
-          <Paper>
-            <DragnDropZone></DragnDropZone>
-          </Paper>
+          <DragnDropZone></DragnDropZone>
         </Box>
 
         <Box mt={4} textAlign="right">

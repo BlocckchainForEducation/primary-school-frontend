@@ -7,22 +7,22 @@ import { Link as RouterLink, useLocation } from "react-router-dom";
 import NavItem from "./NavItem";
 import GavelIcon from "@material-ui/icons/Gavel";
 import EditIcon from "@material-ui/icons/Edit";
-
+import ViewListIcon from "@material-ui/icons/ViewList";
 const items = [
   {
-    href: "/giang-vien/thong-tin-ca-nhan",
+    href: "/giao-vien/thong-tin-ca-nhan",
     icon: UserIcon,
     title: "Thông tin cá nhân",
   },
   {
-    href: "/giang-vien/nhap-diem-lop-hoc",
-    icon: GavelIcon,
-    title: "Nhập điểm lớp học",
+    href: "/giao-vien/ds-lop-hoc",
+    icon: ViewListIcon,
+    title: "Danh sách lớp học",
   },
   {
-    href: "/giang-vien/sua-diem",
+    href: "/giao-vien/ghi-diem-tong-ket",
     icon: EditIcon,
-    title: "Sửa điểm",
+    title: "Ghi điểm tổng kết",
   },
 ];
 
@@ -58,12 +58,12 @@ const NavBar = ({ onMobileClose, openMobile }) => {
   const content = (
     <Box height="100%" display="flex" flexDirection="column">
       <Box alignItems="center" display="flex" flexDirection="column" p={2}>
-        <Avatar className={classes.avatar} component={RouterLink} src={user.imgSrc} to="/giang-vien/thong-tin-ca-nhan" />
+        <Avatar className={classes.avatar} component={RouterLink} src={user.imgSrc} to="/giao-vien/thong-tin-ca-nhan" />
         <Typography className={classes.name} color="textPrimary" variant="h5">
           {user.name}
         </Typography>
         <Typography color="textSecondary" variant="body2">
-          Giảng viên
+          Giáo viên
         </Typography>
       </Box>
       <Divider />

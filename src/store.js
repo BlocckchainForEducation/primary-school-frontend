@@ -1,5 +1,6 @@
 import { combineReducers, configureStore } from "@reduxjs/toolkit";
 import profileReducer from "src/views/staff/Register/redux";
+import teacherProfileReducer from "src/views/teacher/Profile/redux";
 
 export const resetStore = () => {
   return {
@@ -16,6 +17,7 @@ const rootReducer = (state, action) => {
 
 const appReducer = combineReducers({
   profileSlice: profileReducer,
+  teacherProfileSlice: teacherProfileReducer,
 });
 
 export default configureStore({

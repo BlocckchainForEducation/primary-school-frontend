@@ -28,7 +28,7 @@ export default function ClassList(props) {
 
   async function fetchClasses() {
     try {
-      const response = await axios.get("/staff/classes");
+      const response = await axios.get("/teacher/classes");
       const classes = response.data;
       const groupsOfClasses = classes.reduce((accumulator, claxx) => {
         accumulator[claxx.classGroup] = [...(accumulator[claxx.classGroup] || []), claxx];

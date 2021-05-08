@@ -46,7 +46,7 @@ export default function TeacherProfileForm() {
 
   async function hdSubmit(e) {
     try {
-      let response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/api/v1.2/teacher/update-profile`, {
+      let response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/teacher/update-profile`, {
         method: "POST",
         headers: { "Content-Type": "application/json", Authorization: getToken() },
         // delete fetching field before send data to backend to avoid fail validate, delete imgSrc to avoid request too large error.
@@ -73,7 +73,7 @@ export default function TeacherProfileForm() {
   return (
     <Box className={cls.root}>
       <Paper className={cls.head}>
-        <Typography variant="h3">Thông tin Giảng viên</Typography>
+        <Typography variant="h3">Thông tin Giáo viên</Typography>
         <Typography variant="subtitle1">Một số thông tin có thể sẽ không được phép thay đổi</Typography>
       </Paper>
       <Box className={cls.body}>
@@ -113,7 +113,7 @@ export default function TeacherProfileForm() {
                   disabled={disable}
                 ></TextField>
               </Grid>
-              <Grid item xs={12} md={6}>
+              {/* <Grid item xs={12} md={6}>
                 <TextField
                   InputLabelProps={{ shrink: true }}
                   fullWidth
@@ -122,7 +122,7 @@ export default function TeacherProfileForm() {
                   onChange={(e) => setState({ ...state, department: e.target.value })}
                   disabled={disable}
                 ></TextField>
-              </Grid>
+              </Grid> */}
             </Grid>
             <TextField
               InputLabelProps={{ shrink: true }}
