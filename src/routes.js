@@ -13,6 +13,7 @@ import CreateTeacherAccount from "./views/staff/CreateTeacherAccount";
 import MakeRequest from "./views/staff/Register";
 import TeacherProfile from "./views/teacher/Profile";
 import ClassListOfTeacher from "./views/teacher/ClassList";
+import SubmitGrade from "./views/teacher/SubmitGrade";
 
 const routes = [
   {
@@ -33,7 +34,7 @@ const routes = [
     children: [
       { path: "thong-tin-ca-nhan", element: <TeacherProfile /> },
       { path: "ds-lop-hoc", element: <ClassListOfTeacher /> },
-      { path: "ghi-diem-tong-ket", element: <TeacherProfile /> },
+      { path: "ghi-diem-tong-ket", element: <SubmitGrade /> },
       { path: "*", element: <Navigate to="/404" replace={true} /> },
     ],
   },

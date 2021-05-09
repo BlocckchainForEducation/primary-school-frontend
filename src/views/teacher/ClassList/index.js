@@ -24,7 +24,7 @@ export default function ClassList(props) {
 
   useEffect(() => {
     fetchClasses();
-  });
+  }, []);
 
   async function fetchClasses() {
     try {
