@@ -36,7 +36,7 @@ function getRouteByRole(role) {
   if (role === ROLE.STAFF) {
     return "/cb-truong/dang-ki-tham-gia";
   } else if (role === ROLE.TEACHER) {
-    return "/giang-vien/thong-tin-ca-nhan";
+    return "/giao-vien/thong-tin-ca-nhan";
   } else if (role === ROLE.BUREAU) {
     return "/giao-vu/thong-tin-ca-nhan";
   }

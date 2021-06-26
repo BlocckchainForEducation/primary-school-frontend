@@ -54,7 +54,7 @@ export default function CreateTeacherAccount() {
       const response = await axios.post("/staff/create-teacher", formData);
       setUploading(false);
       enqueueSnackbar("Tạo tài khoản các giáo viên thành công!", SUCCESS_BOTTOM_CENTER);
-      const updatedTeachers = [...teachers, ...response.data];
+      const updatedTeachers = [...teachers, ...response.data].map((teacher, index) => ({ ...teacher, id: index + 1 }));
       setTeachers(updatedTeachers);
     } catch (error) {
       setUploading(false);

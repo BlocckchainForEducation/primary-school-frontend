@@ -22,6 +22,7 @@ import Page from "../../../shared/Page";
 import { ERR_TOP_CENTER, SUCCESS_TOP_CENTER } from "../../../utils/snackbar-utils";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import { getLinkFromTxid } from "../../../utils/utils";
+import { requirePrivateKeyHex } from "../../../utils/keyholder";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -57,7 +58,8 @@ export default function SubmitGrade(props) {
 
   async function hdSubmit(claxx) {
     try {
-      const response = await axios.post("/teacher/submit-grade", { claxx });
+      const privateKeyHex = await requirePrivateKeyHex(enqueueSnackbar);
+      const response = await axios.post("/teacher/submit-grade", { claxx, privateKeyHex });
       enqueueSnackbar("Ghi điểm thành công!", SUCCESS_TOP_CENTER);
     } catch (error) {
       error.response && enqueueSnackbar(JSON.stringify(error.response.data), ERR_TOP_CENTER);

@@ -1,3 +1,4 @@
+import DateFnsUtils from "@date-io/date-fns";
 import {
   AppBar,
   Box,
@@ -16,29 +17,28 @@ import {
   TextField,
   Typography,
 } from "@material-ui/core";
-import { Autocomplete } from "@material-ui/lab";
-import { useEffect, useState } from "react";
-import Page from "../../../shared/Page";
-import "date-fns";
-import { KeyboardDatePicker, MuiPickersUtilsProvider } from "@material-ui/pickers";
-import DateFnsUtils from "@date-io/date-fns";
 import DeleteIcon from "@material-ui/icons/Delete";
-import DragnDropZone from "../../../shared/DragnDropZone";
+import { Autocomplete } from "@material-ui/lab";
+import { KeyboardDatePicker, DatePicker, MuiPickersUtilsProvider } from "@material-ui/pickers";
 import axios from "axios";
+import "date-fns";
 import { useSnackbar } from "notistack";
+import { useEffect, useState } from "react";
+import DragnDropZone from "../../../shared/DragnDropZone";
+import Page from "../../../shared/Page";
+import { requirePrivateKeyHex } from "../../../utils/keyholder";
 import { ERR_TOP_CENTER, SUCCESS_TOP_CENTER } from "../../../utils/snackbar-utils";
 
 export default function CreateClass(props) {
   const [classGroup, setClassGroup] = useState(null);
-  const [teacher, setTeacher] = useState({});
   const classGroupOptions = [1, 2, 3, 4, 5];
-  const [teacherOptions, setTeacherOptions] = useState([{ name: "" }]);
   const [nameOfClass, setNameOfClass] = useState("");
+  const [teacher, setTeacher] = useState({});
+  const [teacherOptions, setTeacherOptions] = useState([{ name: "" }]);
   const { enqueueSnackbar } = useSnackbar();
 
   const [currentTab, setCurrentTab] = useState(0);
   const [students, setStudents] = useState([{}]);
-  console.log({ students });
 
   useEffect(() => {
     fetchTeachers();
@@ -56,15 +56,17 @@ export default function CreateClass(props) {
 
   async function hdSubmit() {
     try {
-      console.log(students);
+      const privateKeyHex = await requirePrivateKeyHex(enqueueSnackbar);
+      // console.log(students);
       const claxx = { classGroup, nameOfClass, teacher, students };
-      const response = await axios.post("/staff/create-class", { claxx });
+      const response = await axios.post("/staff/create-class", { claxx, privateKeyHex });
       enqueueSnackbar("Tạo lớp thành công!", SUCCESS_TOP_CENTER);
       setClassGroup(null);
       setNameOfClass("");
       setTeacher({});
       setStudents([]);
     } catch (error) {
+      console.error(error);
       error.response && enqueueSnackbar(JSON.stringify(error.response.data), ERR_TOP_CENTER);
     }
   }
@@ -130,8 +132,10 @@ export default function CreateClass(props) {
                   <TableCell>#</TableCell>
                   <TableCell>Họ và Tên</TableCell>
                   <TableCell>Ngày sinh</TableCell>
-                  <TableCell>Giới tính</TableCell>
+                  <TableCell style={{ width: 125 }}>Giới tính</TableCell>
                   <TableCell>Quê quán</TableCell>
+                  <TableCell>Email</TableCell>
+                  <TableCell>Khóa công khai (optional)</TableCell>
                   <TableCell></TableCell>
                 </TableRow>
               </TableHead>
@@ -151,7 +155,7 @@ export default function CreateClass(props) {
                       ></TextField>
                     </TableCell>
 
-                    <TableCell>
+                    <TableCell style={{ width: 175 }}>
                       <MuiPickersUtilsProvider utils={DateFnsUtils}>
                         <KeyboardDatePicker
                           disableFuture
@@ -187,6 +191,26 @@ export default function CreateClass(props) {
                         onChange={(e) => {
                           const clone = [...students];
                           clone[index].locale = e.target.value;
+                          setStudents(clone);
+                        }}
+                      ></TextField>
+                    </TableCell>
+                    <TableCell>
+                      <TextField
+                        value={student.email}
+                        onChange={(e) => {
+                          const clone = [...students];
+                          clone[index].email = e.target.value;
+                          setStudents(clone);
+                        }}
+                      ></TextField>
+                    </TableCell>
+                    <TableCell>
+                      <TextField
+                        value={student.publicKey}
+                        onChange={(e) => {
+                          const clone = [...students];
+                          clone[index].publicKey = e.target.value;
                           setStudents(clone);
                         }}
                       ></TextField>

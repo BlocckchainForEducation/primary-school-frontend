@@ -3,6 +3,7 @@ import {
   AccordionDetails,
   AccordionSummary,
   Box,
+  Button,
   Table,
   TableBody,
   TableCell,
@@ -11,15 +12,19 @@ import {
   TableRow,
   Typography,
 } from "@material-ui/core";
+import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import axios from "axios";
 import { useSnackbar } from "notistack";
 import { useEffect, useState } from "react";
 import Page from "../../../shared/Page";
+import { requirePrivateKeyHex } from "../../../utils/keyholder";
 import { ERR_TOP_CENTER } from "../../../utils/snackbar-utils";
-import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
+import LevelUpDialog from "./LevelUpDialog";
 
 export default function ClassList(props) {
   const [groupsOfClasses, setGroupsOfClasses] = useState({});
+  const [openDialog, setOpenDialog] = useState(false);
+
   const { enqueueSnackbar } = useSnackbar();
 
   useEffect(() => {
@@ -51,18 +56,38 @@ export default function ClassList(props) {
             {entry[1].map((claxx, cIndex) => (
               <Accordion key={cIndex}>
                 <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-                  {`Lớp ${claxx.nameOfClass}, GVCN: ${claxx.teacher.name}`}
+                  <Box flexGrow="1" display="flex" justifyContent="space-between" alignItems="center" pr={1}>
+                    <Box>{`Lớp ${claxx.nameOfClass}, GVCN: ${claxx.teacher.name}`}</Box>
+                    {claxx.isSubmited && (
+                      <Button
+                        size="small"
+                        color="primary"
+                        variant="outlined"
+                        onClick={async (e) => {
+                          e.preventDefault();
+                          e.stopPropagation();
+                          setOpenDialog(true);
+                        }}
+                      >
+                        Lên lớp
+                      </Button>
+                    )}
+                  </Box>
                 </AccordionSummary>
+                {openDialog && (
+                  <LevelUpDialog hdClose={() => setOpenDialog(false)} claxx={claxx} refresh={() => fetchClasses()}></LevelUpDialog>
+                )}
                 <AccordionDetails>
                   <TableContainer>
                     <Table>
                       <TableHead>
                         <TableRow>
                           <TableCell>#</TableCell>
-                          <TableCell style={{ width: "30%" }}>Họ và Tên</TableCell>
+                          <TableCell style={{}}>Họ và Tên</TableCell>
                           <TableCell>Ngày sinh</TableCell>
                           <TableCell>Giới tính</TableCell>
                           <TableCell>Quê quán</TableCell>
+                          <TableCell>Khóa bí mật</TableCell>
                           <TableCell></TableCell>
                         </TableRow>
                       </TableHead>
@@ -74,6 +99,7 @@ export default function ClassList(props) {
                             <TableCell>{student.birthday.split("T")[0]}</TableCell>
                             <TableCell>{student.gender}</TableCell>
                             <TableCell>{student.locale}</TableCell>
+                            <TableCell>{student.privateKey}</TableCell>
                             <TableCell></TableCell>
                           </TableRow>
                         ))}
