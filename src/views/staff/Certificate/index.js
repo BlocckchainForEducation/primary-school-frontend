@@ -28,7 +28,7 @@ export default function Certificate(props) {
       <Page title="Công nhận hoàn thành CTTH">
         {classes.map((claxx, index) => (
           <Box key={index} mb={2}>
-            <ClassCollapse claxx={claxx}></ClassCollapse>
+            <ClassCollapse claxx={claxx} fetch5thClasses={fetch5thClasses}></ClassCollapse>
           </Box>
         ))}
       </Page>

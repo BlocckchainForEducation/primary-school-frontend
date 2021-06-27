@@ -19,6 +19,7 @@ import KeyboardArrowUpIcon from "@material-ui/icons/KeyboardArrowUp";
 import axios from "axios";
 import { useSnackbar } from "notistack";
 import { useState } from "react";
+import { requirePrivateKeyHex } from "../../../utils/keyholder";
 import { ERR_TOP_CENTER } from "../../../utils/snackbar-utils";
 import { getLinkFromTxid } from "../../../utils/utils";
 
@@ -28,7 +29,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function ClassCollapse({ claxx, minWidth }) {
+export default function ClassCollapse({ claxx, fetch5thClasses, minWidth }) {
   const cls = useStyles();
   const [show, setShow] = useState(false);
   const { enqueueSnackbar } = useSnackbar();
@@ -37,7 +38,20 @@ export default function ClassCollapse({ claxx, minWidth }) {
   async function hdIssueAll(e, stateClass) {
     e.stopPropagation();
     try {
-      const response = await axios.post("/staff/issue-all", { claxx: stateClass });
+      const privateKeyHex = await requirePrivateKeyHex(enqueueSnackbar);
+      const response = await axios.post("/staff/issue-all", { privateKeyHex, claxx: stateClass });
+      fetch5thClasses();
+      // setStateClass(response.data);
+    } catch (error) {
+      error.response && enqueueSnackbar(JSON.stringify(error.response.data), ERR_TOP_CENTER);
+    }
+  }
+
+  async function hdIssueOne(e, sIndex) {
+    e.stopPropagation();
+    try {
+      const privateKeyHex = await requirePrivateKeyHex(enqueueSnackbar);
+      const response = await axios.post("/staff/issue-all", { privateKeyHex, claxx: stateClass, sIndex });
       setStateClass(response.data);
     } catch (error) {
       error.response && enqueueSnackbar(JSON.stringify(error.response.data), ERR_TOP_CENTER);
@@ -117,7 +131,7 @@ export default function ClassCollapse({ claxx, minWidth }) {
                     {student.issueTxid ? (
                       getLinkFromTxid(student.issueTxid, 10)
                     ) : (
-                      <Button variant="contained" color="primary" size="small">
+                      <Button variant="contained" color="primary" size="small" onClick={(e) => hdIssueOne(e, sIndex)}>
                         Công nhận
                       </Button>
                     )}

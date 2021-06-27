@@ -23,7 +23,6 @@ import LevelUpDialog from "./LevelUpDialog";
 
 export default function ClassList(props) {
   const [groupsOfClasses, setGroupsOfClasses] = useState({});
-  const [openDialog, setOpenDialog] = useState(false);
 
   const { enqueueSnackbar } = useSnackbar();
 
@@ -35,7 +34,8 @@ export default function ClassList(props) {
     try {
       const response = await axios.get("/staff/classes");
       const classes = response.data;
-      const groupsOfClasses = classes.reduce((accumulator, claxx) => {
+      const filteLevelUpedClass = classes.filter((claxx) => !claxx.isLevelUp);
+      const groupsOfClasses = filteLevelUpedClass.reduce((accumulator, claxx) => {
         accumulator[claxx.classGroup] = [...(accumulator[claxx.classGroup] || []), claxx];
         return accumulator;
       }, {});
@@ -54,64 +54,70 @@ export default function ClassList(props) {
               Khối lớp {entry[0]}:
             </Typography>
             {entry[1].map((claxx, cIndex) => (
-              <Accordion key={cIndex}>
-                <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-                  <Box flexGrow="1" display="flex" justifyContent="space-between" alignItems="center" pr={1}>
-                    <Box>{`Lớp ${claxx.nameOfClass}, GVCN: ${claxx.teacher.name}`}</Box>
-                    {claxx.isSubmited && (
-                      <Button
-                        size="small"
-                        color="primary"
-                        variant="outlined"
-                        onClick={async (e) => {
-                          e.preventDefault();
-                          e.stopPropagation();
-                          setOpenDialog(true);
-                        }}
-                      >
-                        Lên lớp
-                      </Button>
-                    )}
-                  </Box>
-                </AccordionSummary>
-                {openDialog && (
-                  <LevelUpDialog hdClose={() => setOpenDialog(false)} claxx={claxx} refresh={() => fetchClasses()}></LevelUpDialog>
-                )}
-                <AccordionDetails>
-                  <TableContainer>
-                    <Table>
-                      <TableHead>
-                        <TableRow>
-                          <TableCell>#</TableCell>
-                          <TableCell style={{}}>Họ và Tên</TableCell>
-                          <TableCell>Ngày sinh</TableCell>
-                          <TableCell>Giới tính</TableCell>
-                          <TableCell>Quê quán</TableCell>
-                          <TableCell>Khóa bí mật</TableCell>
-                          <TableCell></TableCell>
-                        </TableRow>
-                      </TableHead>
-                      <TableBody>
-                        {claxx.students.map((student, sIndex) => (
-                          <TableRow key={sIndex}>
-                            <TableCell>{sIndex + 1}</TableCell>
-                            <TableCell>{student.name}</TableCell>
-                            <TableCell>{student.birthday.split("T")[0]}</TableCell>
-                            <TableCell>{student.gender}</TableCell>
-                            <TableCell>{student.locale}</TableCell>
-                            <TableCell>{student.privateKey}</TableCell>
-                            <TableCell></TableCell>
-                          </TableRow>
-                        ))}
-                      </TableBody>
-                    </Table>
-                  </TableContainer>
-                </AccordionDetails>
-              </Accordion>
+              <ClassAccordion cIndex={cIndex} claxx={claxx} fetchClasses={fetchClasses}></ClassAccordion>
             ))}
           </Box>
         ))}
       </Page>
     </div>
+  );
+}
+
+function ClassAccordion({ cIndex, claxx, fetchClasses }) {
+  const [openDialog, setOpenDialog] = useState(false);
+
+  return (
+    <Accordion key={cIndex}>
+      <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+        <Box flexGrow="1" display="flex" justifyContent="space-between" alignItems="center" pr={1}>
+          <Box>{`Lớp ${claxx.nameOfClass}, GVCN: ${claxx.teacher.name}`}</Box>
+          {claxx.isSubmited && (
+            <Button
+              size="small"
+              color="primary"
+              variant="outlined"
+              onClick={async (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                setOpenDialog(true);
+              }}
+            >
+              Lên lớp
+            </Button>
+          )}
+        </Box>
+      </AccordionSummary>
+      {openDialog && <LevelUpDialog hdClose={() => setOpenDialog(false)} claxx={claxx} refresh={() => fetchClasses()}></LevelUpDialog>}
+      <AccordionDetails>
+        <TableContainer>
+          <Table>
+            <TableHead>
+              <TableRow>
+                <TableCell>#</TableCell>
+                <TableCell style={{}}>Họ và Tên</TableCell>
+                <TableCell>Ngày sinh</TableCell>
+                <TableCell>Giới tính</TableCell>
+                <TableCell>Quê quán</TableCell>
+                <TableCell>Khóa bí mật</TableCell>
+                <TableCell></TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {claxx.students.map((student, sIndex) => (
+                <TableRow key={sIndex}>
+                  <TableCell>{sIndex + 1}</TableCell>
+                  <TableCell>{student.name}</TableCell>
+                  <TableCell>{student.birthday.split("T")[0]}</TableCell>
+                  <TableCell>{student.gender}</TableCell>
+                  <TableCell>{student.locale}</TableCell>
+                  <TableCell>{student.privateKey}</TableCell>
+                  <TableCell></TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </TableContainer>
+      </AccordionDetails>
+    </Accordion>
   );
 }

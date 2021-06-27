@@ -46,7 +46,8 @@ export default function SubmitGrade(props) {
     try {
       const response = await axios.get("/teacher/classes");
       const classes = response.data;
-      const groupsOfClasses = classes.reduce((accumulator, claxx) => {
+      const filteLevelUpedClass = classes.filter((claxx) => !claxx.isLevelUp);
+      const groupsOfClasses = filteLevelUpedClass.reduce((accumulator, claxx) => {
         accumulator[claxx.classGroup] = [...(accumulator[claxx.classGroup] || []), claxx];
         return accumulator;
       }, {});
@@ -60,6 +61,7 @@ export default function SubmitGrade(props) {
     try {
       const privateKeyHex = await requirePrivateKeyHex(enqueueSnackbar);
       const response = await axios.post("/teacher/submit-grade", { claxx, privateKeyHex });
+      fetchClasses();
       enqueueSnackbar("Ghi điểm thành công!", SUCCESS_TOP_CENTER);
     } catch (error) {
       error.response && enqueueSnackbar(JSON.stringify(error.response.data), ERR_TOP_CENTER);
